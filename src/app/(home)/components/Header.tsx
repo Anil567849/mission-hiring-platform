@@ -1,15 +1,56 @@
+'use client';
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
+import { signIn, signOut, useSession } from "next-auth/react";
+import React, { useRef, useState } from "react";
+import {
+  DialogTrigger,
+} from "@/components/ui/dialog"
+import PostCardModal from "./PostJobModal";
 
 export default function Component() {
+  const session = useSession();
+  const [job, setJob] = useState<string>("");
+  const modalOpen = useRef<HTMLButtonElement | null>(null)
+  
+  function handlePostaJob(){
+    if(session.data){
+      if(!modalOpen || !modalOpen.current) return
+      modalOpen.current.click();
+    }else{
+      signIn();
+    }
+  }
+  
+  function handleSearchJob(){
+    alert(`search a job: ${job}`);
+  }
+
   return (
     <div className="relative h-[60vh] w-full bg-center flex flex-col items-center justify-center bg-[url('/bg1.jpg')] bg-cover">
+      
+      <PostCardModal ButtonTriggerComponent={<Button variant="outline" className="hidden" ref={modalOpen}>Open Job Application</Button>}/>
+      
       {/* Buttons at the top right */}
       <div className="absolute top-4 right-4 space-x-2">
-        <Button variant="outline" className="bg-white bg-opacity-50 hover:bg-opacity-75 rounded-3xl">
+        {
+          !session.data ? <Button 
+          variant="outline" 
+          className="bg-white bg-opacity-50 hover:bg-opacity-75 rounded-3xl"
+          onClick={() => signIn()}>
           Login
-        </Button>
-        <Button className="bg-primary hover:bg-primary/90 rounded-3xl">
+          </Button> : 
+          <Button 
+          variant="outline" 
+          className="bg-white bg-opacity-50 hover:bg-opacity-75 rounded-3xl"
+          onClick={() => signOut()}>
+            Logout
+          </Button>
+        }
+        
+        <Button 
+        className="bg-primary hover:bg-primary/90 rounded-3xl"
+        onClick={handlePostaJob}>
           Post a Job
         </Button>
       </div>
@@ -27,8 +68,12 @@ export default function Component() {
             type="search" 
             placeholder="Search..." 
             className="flex-grow text-white font-bold rounded-3xl"
+            value={job}
+            onChange={(e) => setJob(e.target.value)}
           />
-          <Button type="submit" className="ml-2">
+          <Button  
+          className="ml-2"
+          onClick={handleSearchJob}>
             Search
           </Button>
         </div>

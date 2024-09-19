@@ -1,3 +1,4 @@
+import { Button } from "@/components/ui/button";
 import Header from "./components/Header";
 import JobCard from "./components/JobCard";
 import Navbar from "./components/Navbar";
