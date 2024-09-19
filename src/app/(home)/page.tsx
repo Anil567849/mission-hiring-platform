@@ -1,10 +1,60 @@
-import { Button } from "@/components/ui/button";
+'use client'
 import Header from "./components/Header";
 import JobCard from "./components/JobCard";
 import Navbar from "./components/Navbar";
-import {jobListings} from './data/dummy.js';
+import { useEffect, useState } from "react";
+
+interface IJob {
+    logo: string;
+    title: string;
+    company: string;
+    benefits: string[];
+    tags: string[];
+    posted: string;
+}
 
 export default function Home() {
+  const [jobListings, setJobListings] = useState<IJob[]>();
+  const [posts, setPosts] = useState(0)
+
+  async function fetchData() {
+    const url = 'http://localhost:3000/api/get-jobs'
+    const res = await fetch(url, {
+      method: "POST",
+      body: JSON.stringify({range: [posts, posts+9]})
+    })
+    setPosts(posts+10); // next time fetch
+    const {jobs} = await res.json();
+    setJobListings((prevJobs) => {
+      return !prevJobs ? jobs : [...prevJobs, ...jobs]
+    });
+  }
+
+  useEffect(() => {
+    fetchData();
+  }, [])
+
+  useEffect(() => {
+    function handleScroll() {
+      const windowHeight = window.innerHeight;
+      const documentHeight = document.documentElement.scrollHeight;
+      const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+      
+      const atBottom = windowHeight + scrollTop >= documentHeight - 200; // 200px threshold
+      // fetch more content 
+      if(atBottom){
+        fetchData();
+      }
+      
+    }
+
+    window.addEventListener('scroll', handleScroll);
+    handleScroll(); // Check initial position
+
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+  
+
   return (
     <div className="min-h-screen font-[family-name:var(--font-geist-sans)]">
       <Header />
@@ -14,7 +64,7 @@ export default function Home() {
         </div>
         <div className="w-[80vw] grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-5 mt-5">
           {
-            jobListings.map((job, index) => {
+            jobListings && jobListings.map((job: IJob, index) => {
               return <JobCard key={index} logo={job.logo}
               title={job.title}
               company={job.company}

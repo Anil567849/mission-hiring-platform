@@ -1,7 +1,6 @@
 import { getServerSession } from "next-auth";
 import { NextRequest } from "next/server"
 
-
 export async function POST(request: NextRequest){
     const {tags, company, location, role, salary} = await request.json();
 
