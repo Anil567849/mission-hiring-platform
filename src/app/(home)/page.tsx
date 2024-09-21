@@ -5,37 +5,53 @@ import Navbar from "./components/Navbar";
 import { useEffect, useState } from "react";
 
 interface IJob {
-    logo: string;
-    title: string;
-    company: string;
-    benefits: string[];
-    tags: string[];
-    posted: string;
+  _id: string;
+  email: string;
+  companyName: string;
+  aboutCompany: string;
+  companyMission: string;
+  companyVision: string;
+  numberOfPeople: string;
+  companyLocation: string;
+  jobRole: string;
+  primaryTag: string;
+  tags: string[];
+  employmentType: string;
+  jobDescription: string;
+  minSalary: string;
+  maxSalary: string;
+  join: Date;
 }
+
+const LOGO = "https://img.freepik.com/free-vector/quill-pen-logo-template_23-2149852429.jpg?w=740&t=st=1726913330~exp=1726913930~hmac=88dad5eb5c1f949760b302a56f8b19986984ee712b0f8f0fe185094c4d747dc1";
 
 export default function Home() {
   const [jobListings, setJobListings] = useState<IJob[]>();
   const [posts, setPosts] = useState(0)
 
+  useEffect(() => {
+    async function getData(){
+      const url = 'http://localhost:3000/api/get-jobs'
+      const res = await fetch(url, {
+        method: "POST",
+        body: JSON.stringify({range: [posts, posts+9]})
+      })
+      const {jobs} = await res.json();
+
+      setJobListings((prevJobs) => {
+        return !prevJobs ? jobs : [...prevJobs, ...jobs]
+      });
+    }
+    getData();
+  }, [posts])
+  
+
   async function fetchData() {
-    const url = 'http://localhost:3000/api/get-jobs'
-    const res = await fetch(url, {
-      method: "POST",
-      body: JSON.stringify({range: [posts, posts+9]})
-    })
     setPosts(posts+10); // next time fetch
-    const {jobs} = await res.json();
-    setJobListings((prevJobs) => {
-      return !prevJobs ? jobs : [...prevJobs, ...jobs]
-    });
   }
-
+  let inter = true;
   useEffect(() => {
-    fetchData();
-  }, [])
-
-  useEffect(() => {
-    function handleScroll() {
+    async function handleScroll() {
       const windowHeight = window.innerHeight;
       const documentHeight = document.documentElement.scrollHeight;
       const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
@@ -43,8 +59,16 @@ export default function Home() {
       const atBottom = windowHeight + scrollTop >= documentHeight - 200; // 200px threshold
       // fetch more content 
       if(atBottom){
-        fetchData();
+        if(inter){
+          // console.log('fetched');
+          fetchData();
+        }
+        inter = false;
+        setTimeout(() => {
+          inter = true;
+        }, 5000);
       }
+
       
     }
 
@@ -65,12 +89,12 @@ export default function Home() {
         <div className="w-[80vw] grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-5 mt-5">
           {
             jobListings && jobListings.map((job: IJob, index) => {
-              return <JobCard key={index} logo={job.logo}
-              title={job.title}
-              company={job.company}
-              benefits={job.benefits}
+              return <JobCard key={index} logo={LOGO}
+              title={job.jobRole}
+              company={job.companyName}
+              benefits={[]}
               tags={job.tags}
-              posted={job.posted}/>
+              posted={job.join}/>
             })
           }
         </div>

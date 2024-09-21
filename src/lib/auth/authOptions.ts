@@ -1,8 +1,8 @@
 
 import GithubProvider, { GithubProfile } from "next-auth/providers/github"
 import GoogleProvider from "next-auth/providers/google"
-// import User from "../db/models/userSchema"
-// import connectDB from "../db/db";
+import connectDB from "../db/db";
+import User from "../db/model/userSchema";
 
 export const authOptions = {
   providers: [
@@ -13,7 +13,7 @@ export const authOptions = {
     GithubProvider({
       clientId: process.env.GITHUB_ID as string,
       clientSecret: process.env.GITHUB_SECRET as string,
-      /*
+
       async profile(profile: GithubProfile, token: any) {
         await connectDB();
         // Does user exist
@@ -49,7 +49,7 @@ export const authOptions = {
         }
         
     }
-    */
+
     }),
   ],
 }

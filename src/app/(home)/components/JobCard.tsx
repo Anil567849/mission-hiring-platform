@@ -9,10 +9,17 @@ interface IJob {
     company: string,
     benefits: any[],
     tags: any[],
-    posted: string,
+    posted: Date,
 }
 
 const JobListingCard = ({logo, title, company, benefits, tags, posted}: IJob) => {
+  
+  const joinDate = new Date(posted);
+  const formattedDate = joinDate.toLocaleDateString('en-GB', {
+    day: '2-digit',
+    month: '2-digit',
+    year: 'numeric'
+  }).split('/').join('-');
 
   return (
     <Card className="grid grid-rows-subgrid grid-rows-2 w-full h-[100%] max-w-md mx-auto overflow-hidden shadow-xl rounded-3xl">
@@ -24,7 +31,7 @@ const JobListingCard = ({logo, title, company, benefits, tags, posted}: IJob) =>
             <p className="text-gray-600">{company}</p>
           </div>
         </div>
-        <Badge variant="secondary">{posted}</Badge>
+        <Badge variant="secondary">{formattedDate}</Badge>
       </CardHeader>
       <CardContent className="p-6">
         <div className="flex flex-wrap gap-2 mb-4">
