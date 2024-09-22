@@ -2,7 +2,7 @@
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { signIn, signOut, useSession } from "next-auth/react";
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import {
   Avatar,
   AvatarFallback,
@@ -10,12 +10,29 @@ import {
 } from "@/components/ui/avatar"
 import { useRouter } from "next/navigation";
 import PostCardModal from "./PostJobModal";
+import { IJob } from "../page";
 
-export default function Component() {
+export default function Header({jobListings, setJobListings}: {jobListings: IJob[], setJobListings: any}) {
   const session = useSession();
   const [job, setJob] = useState<string>("");
+  const [search, setSearch] = useState<string>("");
   const modalOpen = useRef<HTMLButtonElement | null>(null)
   const router = useRouter();
+
+  useEffect(() => {
+    async function getData(){
+      const url = 'http://localhost:3000/api/get-jobs'
+      const res = await fetch(url, {
+        method: "POST",
+        body: JSON.stringify({search})
+      })
+      const {jobs} = await res.json();
+
+      setJobListings(jobs);
+    }
+    getData();
+  }, [search])
+  
   
   function handlePostaJob(){
     if(session.data){
@@ -26,8 +43,8 @@ export default function Component() {
     }
   }
   
-  function handleSearchJob(){
-    alert(`search a job: ${job}`);
+  async function handleSearchJob(){
+    setSearch(job);
   }
   
   function handleProfileClick(){
