@@ -1,5 +1,10 @@
 import React from 'react'
-import ShowJobDetails from './_components/ShowJobDetails';
+import dynamic from 'next/dynamic';
+import Loader from '@/components/Loader';
+const ShowJobDetails = dynamic(() => import('./_components/ShowJobDetails'), {
+  loading: () => <Loader />, // Fallback component while loading
+  ssr: false, // Disable SSR for this component
+});
 
 async function StartupPage({params}: {params: {startupId: string}}) {
 

@@ -1,8 +1,11 @@
 'use client'
+import React from 'react';
+import Loader from "@/components/Loader";
 import Header from "./components/Header";
-import JobCard from "./components/JobCard";
 import Navbar from "./components/Navbar";
-import { useEffect, useState } from "react";
+import { useState } from "react";
+import { Suspense } from 'react'
+const JobCard = React.lazy(() => import('./components/JobCard'));
 
 export interface IJob {
   _id: string;
@@ -33,11 +36,13 @@ export default function Home() {
           <Navbar />
         </div>
         <div className="w-[80vw] grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-5 mt-5">
+          
           {
-            jobListings && jobListings.map((job: IJob, index) => {
-              return <JobCard key={index} job={job}/>
+            jobListings && jobListings.map((job: IJob, index) => { 
+              return <Suspense key={index} fallback={<Loader />}> <JobCard job={job}/> </Suspense>
             })
           }
+          
         </div>
       </div>
     </div>
