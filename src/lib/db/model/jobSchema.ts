@@ -15,6 +15,7 @@ interface IJob extends Document {
     jobDescription: string;
     minSalary: string;
     maxSalary: string;
+    jobSeekerEmail: string[];
     join: Date;
 }
 
@@ -78,6 +79,11 @@ const JobSchema: Schema<IJob> = new Schema({
         type: String,
         required: true,
     },
+    jobSeekerEmail: [
+        {
+            type: String,
+        }
+    ],
     join: {
         type: Date,
         default: Date.now,

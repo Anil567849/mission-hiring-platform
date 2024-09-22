@@ -4,7 +4,7 @@ import JobCard from "./components/JobCard";
 import Navbar from "./components/Navbar";
 import { useEffect, useState } from "react";
 
-interface IJob {
+export interface IJob {
   _id: string;
   email: string;
   companyName: string;
@@ -22,9 +22,6 @@ interface IJob {
   maxSalary: string;
   join: Date;
 }
-
-const LOGO = "https://img.freepik.com/free-vector/quill-pen-logo-template_23-2149852429.jpg?w=740&t=st=1726913330~exp=1726913930~hmac=88dad5eb5c1f949760b302a56f8b19986984ee712b0f8f0fe185094c4d747dc1";
-
 export default function Home() {
   const [jobListings, setJobListings] = useState<IJob[]>();
   const [posts, setPosts] = useState(0)
@@ -89,12 +86,7 @@ export default function Home() {
         <div className="w-[80vw] grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-5 mt-5">
           {
             jobListings && jobListings.map((job: IJob, index) => {
-              return <JobCard key={index} logo={LOGO}
-              title={job.jobRole}
-              company={job.companyName}
-              benefits={[]}
-              tags={job.tags}
-              posted={job.join}/>
+              return <JobCard key={index} job={job}/>
             })
           }
         </div>

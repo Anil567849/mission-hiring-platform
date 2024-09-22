@@ -13,7 +13,7 @@ export async function POST(request: NextRequest){
         // const jobs = jobListings.slice(range[0], range[1]) // dummy
 
         const totalCount = await Job.countDocuments();
-        console.log(totalCount, range[0]);
+        // console.log(totalCount, range[0]);
         
         if(range[0] > totalCount){
             return Response.json({jobs: []}, {status: 200});
