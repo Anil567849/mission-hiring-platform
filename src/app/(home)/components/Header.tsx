@@ -92,10 +92,10 @@ export default function Header({jobListings, setJobListings}: {jobListings: IJob
       {/* Centered content */}
       <div className="text-center space-y-6 max-w-2xl px-4">
         <h1 className="text-4xl font-bold text-white drop-shadow-lg">
-          Welcome to Our Platform
+          Mission Vision Hiring Platform
         </h1>
         <p className="text-xl text-white drop-shadow-md">
-          Discover amazing content and connect with others. Start your journey today!
+          Hire people those who are align with your mission and vision.
         </p>
         <div className="flex w-full max-w-md mx-auto">
           <Input 
