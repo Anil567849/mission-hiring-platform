@@ -1,4 +1,4 @@
-#Hire People those who are align with your mission and vision
+# Hire People those who are align with your mission and vision
 
 ![image](https://github.com/user-attachments/assets/96a4e0fd-eb54-4917-b13c-45f02ebeedb8)
 
