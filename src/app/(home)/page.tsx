@@ -1,11 +1,11 @@
 'use client'
 import React from 'react';
 import Loader from "@/components/Loader";
-import Header from "./components/Header";
 import Navbar from "./components/Navbar";
 import { useState } from "react";
 import { Suspense } from 'react'
 const JobCard = React.lazy(() => import('./components/JobCard'));
+const Header = React.lazy(() => import('./components/Header'));
 
 export interface IJob {
   _id: string;
@@ -30,21 +30,21 @@ export default function Home() {
 
   return (
     <div className="min-h-screen font-[family-name:var(--font-geist-sans)]">
-      <Header jobListings={jobListings} setJobListings={setJobListings}/>
+      <Suspense fallback={<Loader />}>
+        <Header jobListings={jobListings} setJobListings={setJobListings}/>
+      </Suspense>
       <div className="flex flex-col items-center">
         <div className="w-[80vw]">
           <Navbar />
         </div>
         <div className="w-[80vw] grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-5 mt-5">
-          
           {
-            jobListings && jobListings.map((job: IJob, index) => { 
-              return <Suspense key={index} fallback={<Loader />}> <JobCard job={job}/> </Suspense>
-            })
+            jobListings && jobListings.map((job, index) => (
+              <JobCard key={index} job={job} />
+            ))
           }
-          
         </div>
-      </div>
+      </div> 
     </div>
   );
 }

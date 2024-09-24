@@ -60,6 +60,20 @@ export default function PostCardModal({ButtonTriggerComponent}: {ButtonTriggerCo
 
     if(data) {
       alert('job posted successfully')
+      setTags([]);
+      setTagInput("");
+      setCompanyName("");
+      setAboutCompany("");
+      setCompanyMission("");
+      setCompanyVision("");
+      setCompanyLocation("");
+      setNumberOfPeople(0);
+      setJobRole("");
+      setPrimaryTag("");
+      setEmploymentType("");
+      setJobDescription("");
+      setMinSalary("");
+      setMaxSalary("");
     }else {
       alert('something went wrong')
     }

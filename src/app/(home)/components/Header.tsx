@@ -27,7 +27,6 @@ export default function Header({jobListings, setJobListings}: {jobListings: IJob
         body: JSON.stringify({search})
       })
       const {jobs} = await res.json();
-
       setJobListings(jobs);
     }
     getData();
